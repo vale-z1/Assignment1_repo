@@ -4,7 +4,10 @@
 #include<iomanip>
 #include<string>
 
-int integer_input_check(int coef_type) // coef type = 0 for A number and 1 for quantum number
+// Asks for an input and checks if its numerical positive integer. It does this by checking every character in the input
+// string corresponds to a number 0-9.
+// Returns the input if integer, otherwise keeps asking until a valid integer is given.
+int integer_input_check()
 {
     std::string input_variable;
 
@@ -32,24 +35,21 @@ int integer_input_check(int coef_type) // coef type = 0 for A number and 1 for q
     }
 
     std::size_t string_size{input_variable.length()};
-    if (digits_count == string_size) {
+    if (digits_count == string_size) // Compares the string lenght to the number of digits in the string.
+    {
         int checked_integer{std::stoi(input_variable)};
         return checked_integer;
     }
 
-    else
-    {
-        std::cout<<input_variable<<" is not a valid integer. Please enter a valid number: "<<std::endl;
+    // If lenght and number of digits do not corresponds, input is not a positive integer. User is asked to input a new value
+    std::cout<<input_variable<<" is not a valid integer. Please enter a valid number: "<<std::endl;
 
-        int checked_integer{integer_input_check(coef_type)};
-        return checked_integer;
-    }
-
-
+    int checked_integer{integer_input_check()};
+    return checked_integer;
 }
 
 
-int y_n_check(std::string y_n)  // Checks for y/n input
+int y_n_check(std::string y_n)  // Checks and validates for y/n input
 {
     if (y_n == "y" || y_n == "Y")
         {
@@ -62,17 +62,15 @@ int y_n_check(std::string y_n)  // Checks for y/n input
         }
 
 
-    else
-    {
-        return 0;
-    }
+    return 0; // Returns 0 if input neither y,Y or n,N
+
 }
 
 
-int physical_restraints(int coefficent_type, int checked_integer)  // int_type = 0 for Atomic number
+int physical_restraints(int coefficent_type, int checked_integer)  // Checks for physical constraints (different for atomic and quantum numbers)
 
 {
-    if (coefficent_type == 0)
+    if (coefficent_type == 0)  // Coefficent type = 0 if checking for A number
 
     {
         if (checked_integer == 0)
@@ -87,9 +85,9 @@ int physical_restraints(int coefficent_type, int checked_integer)  // int_type =
 
             std::string y_n;
 
-
+            // Asks user if they want to proceed with an unrealistically high atomic number
             int x{0};
-            while (x == 0)
+            while (x == 0)  // Creates a loop which is only exited when correct [y/n] input is used
             {
                 std::cin>>y_n;
                 int y_n_result{y_n_check(y_n)};
@@ -118,7 +116,7 @@ int physical_restraints(int coefficent_type, int checked_integer)  // int_type =
 
     }
 
-    if (coefficent_type == 1)  // int_type == 0 for quantum numbers
+    if (coefficent_type == 1)  // coefficent type = 1 to check for quantum numbers validity
     {
         if (checked_integer == 0)
         {
@@ -130,11 +128,13 @@ int physical_restraints(int coefficent_type, int checked_integer)  // int_type =
         else return 1;
 
     }
+
+return 0;
 }
 
 
 
-int transition_energy(int ini_qn, int fin_qn, int atm_number)  // Function to check if the input J or Ev input is correct and converts if necessary
+int transition_energy(int ini_qn, int fin_qn, int atm_number)  // Calculates and converts (after asking to the user) the transition energy
 {
 
     const float electronvolt{1.602e-19};
@@ -151,7 +151,7 @@ int transition_energy(int ini_qn, int fin_qn, int atm_number)  // Function to ch
     std::cout<<"Would you like to convert to Joules? [y/n]"<<std::endl;
 
     int x{0};
-    while (x == 0)
+    while (x == 0)  // Loop to validate [y/n] input
     {
         std::cin>>y_n;
         int y_n_result{y_n_check(y_n)};
@@ -173,7 +173,6 @@ int transition_energy(int ini_qn, int fin_qn, int atm_number)  // Function to ch
         if (y_n_result == 0)
         {
             std::cout<<"For Yes and No please enter [y/n]: "<<std::endl;
-
         }
     }
 
@@ -183,19 +182,17 @@ int transition_energy(int ini_qn, int fin_qn, int atm_number)  // Function to ch
 
 int main()
 {
-
-    // Ask user to enter atomic number
+    // Prompts the user to enter a value for the atomic number
     std::cout<<"Enter a value for the atomic number: "<<std::endl;
 
 
     int flag{0};
     int* A_number_pointer= new int;
 
-    while (flag == 0)
+    while (flag == 0)  // Loop ends when all checks are passed, A_number is therfore fully validated.
     {
         int coef_type{0};
-        *A_number_pointer = integer_input_check(coef_type);
-
+        *A_number_pointer = integer_input_check();
         flag = physical_restraints(coef_type, *A_number_pointer);
     }
 
@@ -209,10 +206,10 @@ int main()
     int flag1{0};
     int* in_qnum_pointer= new int;
 
-    while (flag1 == 0)
+    while (flag1 == 0)  // Loop ends when initial q. number input is fully validated.
     {
         int coef_type{1};
-        *in_qnum_pointer = integer_input_check(coef_type);
+        *in_qnum_pointer = integer_input_check();
 
         flag1 = physical_restraints(coef_type, *in_qnum_pointer);
     }
@@ -227,10 +224,10 @@ int main()
     int flag2{0};
     int* fin_qnumber_pointer= new int;
 
-    while (flag2 == 0)
+    while (flag2 == 0)  // Loop ends when final q. number input is fully validated.
     {
         int coef_type{1};
-        *fin_qnumber_pointer = integer_input_check(coef_type);
+        *fin_qnumber_pointer = integer_input_check();
 
         flag2 = physical_restraints(coef_type, *fin_qnumber_pointer);
     }
@@ -247,9 +244,7 @@ int main()
         transition_energy(fi_qnumber, in_qnumber, A_number);
     }
 
-    else transition_energy(in_qnumber, fi_qnumber, A_number);
-
-
+    else transition_energy(in_qnumber, fi_qnumber, A_number);  
 
     return 0;
 }
