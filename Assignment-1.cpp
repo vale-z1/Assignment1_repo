@@ -1,7 +1,6 @@
 // Program to calculate transition energy using simple Bohr formula
 
 #include<iostream>
-#include<iomanip>
 #include<string>
 
 // Asks for an input and checks if its numerical positive integer. It does this by checking every character in the input
