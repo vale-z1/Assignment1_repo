@@ -13,7 +13,3 @@ Promts:
 <img width="352" alt="image" src="https://github.com/user-attachments/assets/7be7af13-3f50-4bbd-99cf-6c8625422d9a" />
 
 
-<img width="398" alt="image" src="https://github.com/user-attachments/assets/1cd8dd13-4401-4b76-a605-e41309055470" />
-
-
-
